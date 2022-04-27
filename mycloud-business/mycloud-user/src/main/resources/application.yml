@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: mycloud-user
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.112.127.20
+        namespace: 44f6ce99-f0ad-4cef-8b37-9bb33c92a2f4
+
+dubbo:
+  #指定Dubbo服务实现类的扫描基准包
+  scan:
+    base-packages: com.pueeo.user.service
+  #协议配置
+  protocol:
+    name: dubbo
+    port: -1 #协议端口，-1表示自增端口，从20880开始
+  #注册中心配置
+  registry:
+    address: spring-cloud://47.112.127.20:8848
+  cloud:
+    subscribed-services: '' #设置订阅的应用列表，默认为* 订阅所有应用, ''则不订阅
+  consumer:
+    check: false #为false表示启动时不检查是否有消费者
+  #自定义filter
+  provider:
+    filter: -exception

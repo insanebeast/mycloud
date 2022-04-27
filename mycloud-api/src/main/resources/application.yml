@@ -1,0 +1,14 @@
+server:
+  port: 18080
+
+spring:
+  application:
+    name: mycloud-api
+  main:
+    allow-circular-references: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.112.127.20
+        namespace: 44f6ce99-f0ad-4cef-8b37-9bb33c92a2f4
+        register-enabled: false
