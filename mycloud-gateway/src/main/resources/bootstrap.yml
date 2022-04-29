@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: mycloud-gateway
+  cloud:
+    # Spring Cloud Gateway 配置项，对应 GatewayProperties 类
+    gateway:
+      # 这里的route配置维护在配置中心nacos中
+      # 路由配置项，对应 RouteDefinition 数组
+#      routes:
+#        - id: yudaoyuanma # 路由的编号
+#          uri: http://www.iocoder.cn # 路由到的目标地址
+#          predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
+#            - Path=/blog
+#          filters:
+#            - StripPrefix=1
+#        - id: oschina # 路由的编号
+#          uri: https://www.oschina.net # 路由的目标地址
+#          predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
+#            - Path=/oschina
+#          filters: # 过滤器，对请求进行拦截，实现自定义的功能，对应 FilterDefinition 数组
+#            - StripPrefix=1
+      # 与 Spring Cloud 注册中心的集成，对应 DiscoveryLocatorProperties 类
+      discovery:
+        locator:
+          enabled: true
+          url-expression: "'lb://' + serviceId" # 路由的目标地址的表达式
+    sentinel:
+      eager: true
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD}
+      # Sentinel 对 Spring Cloud Gateway 的专属配置项，对应 SentinelGatewayProperties 类
+      scg:
+        order: -2147483648 # 过滤器顺序，默认为 -2147483648 最高优先级
+        fallback:
+          mode: # fallback 模式，目前有三种：response、redirect、空
+          # 专属 response 模式
+          response-status: 429 # 响应状态码，默认为 429
+          response-body: 你被 block 了... # 响应内容，默认为空
+          content-type: application/json # 内容类型，默认为 application/json
+          # 专属 redirect 模式
+          redirect: http://www.baidu.com
+      datasource:
+        ds1:
+          nacos:
+            server-addr: ${SENTINEL_NACOS_SERVER}
+            namespace: ${SENTINEL_NACOS_NAMESPACE}
+            data-id: ${spring.application.name}-api-group-rule.yml
+            data-type: json # 数据格式
+            rule-type: GW_API_GROUP # 规则类型
+
+

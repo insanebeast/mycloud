@@ -1,1 +1,1 @@
-dubboExceptionFilter=com.pueeo.common.filter
+dubboExceptionFilter=com.pueeo.common.filter.DubboExceptionFilter

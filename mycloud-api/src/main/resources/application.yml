@@ -1,14 +1,35 @@
 server:
-  port: 18080
+  port: ${SERVER_PORT}
 
 spring:
-  application:
-    name: mycloud-api
   main:
     allow-circular-references: true
+    allow-bean-definition-overriding: true
   cloud:
-    nacos:
-      discovery:
-        server-addr: 47.112.127.20
-        namespace: 44f6ce99-f0ad-4cef-8b37-9bb33c92a2f4
-        register-enabled: false
+    sentinel:
+      enabled: true #是否开启，默认true
+      eager: true #是否饥饿加载，默认false
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD} #sentinel控制台地址
+      filter:
+        url-patterns: /** #拦截请求地址
+      # Sentinel 规则的数据源，是一个 Map 类型。key 为数据源名，可自定义；value 为数据源的具体配置
+      datasource:
+        ds1:
+          # 对应 DataSourcePropertiesConfiguration 类
+          nacos:
+            server-addr: ${SENTINEL_NACOS_SERVER} # Nacos 服务器地址
+            namespace: ${SENTINEL_NACOS_NAMESPACE} # Nacos 命名空间
+            data-id: ${spring.application.name}-flow-rule # Nacos 配置集编号
+            data-type: json # 数据格式
+            rule-type: FLOW # 规则类型
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  #注册中心配置
+  registry:
+    address: spring-cloud://${DUBBO_REGISTRY_ADDRESS}
+  cloud:
+    subscribed-services: mycloud-user,mycloud-post # 设置订阅的应用列表，默认为* 订阅所有应用, ''则不订阅
+
