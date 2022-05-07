@@ -1,2 +1,22 @@
 server:
   port: ${SERVER_PORT}
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  redis:
+    #database: 0 # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
+    host: ${REDIS_HOST}
+    password: ${REDIS_PASSWORD}
+    port: ${REDIS_PORT}
+    timeout: 3000 # 连接超时时间（毫秒）
+
+oauth2:
+  cloud:
+    ignoreUrls:
+      - /oauth/token
+      - /oauth/authorize
+

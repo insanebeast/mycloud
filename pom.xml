@@ -10,8 +10,10 @@
 
     <modules>
         <module>mycloud-common</module>
-        <module>mycloud-api</module>
         <module>mycloud-business</module>
+        <module>mycloud-dubbo</module>
+        <module>mycloud-gateway</module>
+        <module>mycloud-oauth</module>
     </modules>
 
     <properties>
@@ -72,8 +74,6 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-
-
         <!--  Spring Cloud Alibaba Sentinel -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -85,10 +85,23 @@
             <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

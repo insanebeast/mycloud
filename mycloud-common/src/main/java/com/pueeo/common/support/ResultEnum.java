@@ -4,7 +4,19 @@ import lombok.Getter;
 
 @Getter
 public enum ResultEnum {
+    CLIENT_AUTHENTICATION_FAILED(1001,"客户端认证失败"),
+    USERNAME_OR_PASSWORD_ERROR(1002,"用户名或密码错误"),
+    UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式"),
+    INVALID_TOKEN(1004,"无效的token"),
+    INVALID_SCOPE(1005,"无效的scope"),
+    INVALID_REQUEST(1006, "无效的请求"),
+    FORBID_REQUEST(1007, "禁止访问"),
 
+    NO_PERMISSION(1005,"无权限访问"),
+    SYSTEM_ERROR(500, "系统错误"),
+
+
+    FREQUENT_REQUEST(429, "操作太快了，休息一会儿～"),
     SERVER_ERROR(500, "服务器开小差了～请稍后再试！"),
     PARAMETER_ILLEGAL(400, "非法参数"),
     SENTINEL_ERROR(100, "Sentinel拦截"),

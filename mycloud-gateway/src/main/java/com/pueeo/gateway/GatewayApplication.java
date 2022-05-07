@@ -4,8 +4,11 @@ import com.alibaba.cloud.sentinel.gateway.ConfigConstants;
 import com.alibaba.csp.sentinel.config.SentinelConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.pueeo.common","com.pueeo.gateway","com.pueeo.oauth"})
 public class GatewayApplication {
 
     public static void main(String[] args) {

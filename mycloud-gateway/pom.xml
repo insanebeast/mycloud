@@ -12,6 +12,18 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
+        <dependency>
+            <groupId>com.pueeo</groupId>
+            <artifactId>mycloud-oauth</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pueeo</groupId>
+            <artifactId>mycloud-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Spring Cloud Gateway 相关依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -29,22 +41,5 @@
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

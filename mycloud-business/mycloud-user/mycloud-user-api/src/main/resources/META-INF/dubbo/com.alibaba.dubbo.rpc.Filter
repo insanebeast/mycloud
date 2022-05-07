@@ -1,0 +1,3 @@
+dubboExceptionFilter=com.pueeo.dubbo.filter.DubboExceptionFilter
+userContextProviderFilter=com.pueeo.dubbo.filter.UserContextProviderFilter
+userContextConsumerFilter=com.pueeo.dubbo.filter.UserContextConsumerFilter
