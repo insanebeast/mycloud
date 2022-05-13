@@ -1,10 +1,14 @@
 package com.pueeo.user.service;
 
-import com.pueeo.user.entity.dto.UserDTO;
+import com.pueeo.common.support.LoginUser;
+import com.pueeo.user.entity.dto.UserRegisterDTO;
+import com.pueeo.user.entity.vo.UserProfileVO;
 
 public interface UserService {
 
-    UserDTO get(Long uid);
+    UserProfileVO get(Long uid);
+
+    LoginUser currentUser();
 
 
 }

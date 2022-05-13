@@ -3,7 +3,7 @@ package com.pueeo.common.utils;
 public class SnowflakeIdUtil {
     // ==============================Fields===========================================
     /** 开始时间截 (2015-01-01) */
-    private final long twepoch = 1420041600000L;
+    private final long twepoch = 1651334400000L;
     /** 机器id所占的位数 */
     private final long workerIdBits = 5L;
     /** 数据标识id所占的位数 */
@@ -35,7 +35,7 @@ public class SnowflakeIdUtil {
      * 以SnowFlake算法，获取唯一有序id
      * @return
      */
-    public static long getSnowflakeId() {
+    public static long nextId() {
         if(idWorker == null) {
             synchronized (SnowflakeIdUtil.class) {
                 if(idWorker == null) {
@@ -43,7 +43,7 @@ public class SnowflakeIdUtil {
                 }
             }
         }
-        return idWorker.nextId();
+        return idWorker.nextid();
     }
     // ==============================Methods==========================================
    private SnowflakeIdUtil() {
@@ -87,7 +87,7 @@ public class SnowflakeIdUtil {
      * 获得下一个ID (该方法是线程安全的)
      * @return SnowflakeId
      */
-    protected synchronized long nextId() {
+    protected synchronized long nextid() {
         long timestamp = timeGen();
         //如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
@@ -116,7 +116,7 @@ public class SnowflakeIdUtil {
                 | sequence;
     }
     public static void main(String[] args) {
-        long snowflakeId = getSnowflakeId();
+        long snowflakeId = nextId();
         System.out.println(snowflakeId);
     }
 }

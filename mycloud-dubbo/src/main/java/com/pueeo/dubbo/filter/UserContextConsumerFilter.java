@@ -20,10 +20,9 @@ public class UserContextConsumerFilter implements Filter {
         if (loginUser != null) {
             userInfo = JSONObject.toJSONString(loginUser);
         } else {
-            userInfo = RpcContext.getContext().getAttachment(SysConstant.USER_CONTEXT_RPC_ATTACHMENT);
+            userInfo = invocation.getAttachment(SysConstant.USER_CONTEXT_RPC_ATTACHMENT);
         }
-        invocation.getAttachments()
-                .put(SysConstant.USER_CONTEXT_RPC_ATTACHMENT, userInfo);
+        invocation.setAttachment(SysConstant.USER_CONTEXT_RPC_ATTACHMENT, userInfo);
         return invoker.invoke(invocation);
     }
 }

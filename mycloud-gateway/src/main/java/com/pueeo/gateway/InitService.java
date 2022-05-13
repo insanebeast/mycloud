@@ -1,6 +1,7 @@
 package com.pueeo.gateway;
 
 import com.google.common.collect.Lists;
+import com.pueeo.common.support.RedisKey;
 import com.pueeo.common.support.redis.RedisService;
 import com.pueeo.common.constant.SysConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class InitService {
 
     @PostConstruct
     public void init(){
-        redisService.hset(SysConstant.OAUTH_URLS,"/post/degrade", Lists.newArrayList("ROLE_admin","ROLE_user"));
-        redisService.hset(SysConstant.OAUTH_URLS,"/post/add", Lists.newArrayList("ROLE_admin"));
+        redisService.hset(SysConstant.OAUTH_URLS,"/post-api/post/**", Lists.newArrayList("ROLE_admin","ROLE_appuser"));
+        redisService.set(RedisKey.SMS_CODE_LOGIN.getKey("15626207086"), "762182");
     }
 
 }

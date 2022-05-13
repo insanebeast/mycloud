@@ -55,7 +55,7 @@ public class GatewaySecurityConfig {
     private CorsFilter corsFilter;
 
     @Bean
-    SecurityWebFilterChain webFluxSecurityFilterChain(ServerHttpSecurity http) throws Exception{
+    SecurityWebFilterChain webFluxSecurityFilterChain(ServerHttpSecurity http) {
         //认证过滤器，放入认证管理器
         AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(jwtAuthenticationManager);
         authenticationWebFilter.setServerAuthenticationConverter(new ServerBearerTokenAuthenticationConverter());

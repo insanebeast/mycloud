@@ -1,6 +1,5 @@
 package com.pueeo.oauth.config;
 
-import com.pueeo.common.constant.SysConstant;
 import com.pueeo.common.constant.TokenConstant;
 import com.pueeo.oauth.support.AuthUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

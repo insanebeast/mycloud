@@ -3,13 +3,14 @@ package com.pueeo.post.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.pueeo.common.constant.SysConstant;
-import com.pueeo.common.exception.ServiceException;
+import com.pueeo.common.exception.BusinessException;
 import com.pueeo.common.support.ApiResult;
 import com.pueeo.common.support.LoginUser;
 import com.pueeo.common.support.redis.RedisService;
 import com.pueeo.post.entity.dto.PostDTO;
 import com.pueeo.post.service.PostService;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,14 +60,16 @@ public class PostController {
     @GetMapping("/info")
     public ApiResult info(HttpServletRequest request) {
         LoginUser loginUser = (LoginUser)request.getAttribute(SysConstant.USER_CONTEXT_REQUEST_ATTRIBUTE);
-        return ApiResult.success(loginUser);
+        LoginUser loginUser1 = postService.info();
+        Assert.isTrue(loginUser1.equals(loginUser), "not equals");
+        return ApiResult.success(loginUser1);
     }
 
     @GetMapping("/degrade")
     @SentinelResource(value = "post.degrade", blockHandler = "blockHandler",  fallback = "fallback")
     public ApiResult degrade(int id){
         if (id == 9){
-            throw new ServiceException(400, "id illegal");
+            throw new BusinessException(400, "id illegal");
         }
         if (id== 0){
             throw new IllegalArgumentException("id = 0");

@@ -7,6 +7,16 @@ spring:
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL_MASTER}
+    username: ${MYSQL_USERNAME_MASTER}
+    password: ${MYSQL_PASSWORD_MASTER}
+    hikari:
+      connection-timeout: 3000
+      idle-timeout: 100000
+      maximum-pool-size: 30
+      minimum-idle: 10
   redis:
     #database: 0 # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
     host: ${REDIS_HOST}
@@ -31,6 +41,30 @@ spring:
             data-id: ${spring.application.name}-flow-rule # Nacos 配置集编号
             data-type: json # 数据格式
             rule-type: FLOW # 规则类型
+    stream:
+      function:
+        definition: userRegist;sms;
+      bindings:
+        userRegist-in-0:
+          destination: USER_TOPIC
+          group: USER_CONSUMER
+        sms-in-0:
+          destination: SMS_TOPIC
+          group: SMS_CONSUMER
+      rocketmq:
+        binder:
+          name-server: ${ROCKETMQ_NAMESERVER}
+          group: mycloud
+        bindings:
+          userRegist-in-0:
+            consumer:
+              subscription: userRegist # tags 多个用||分隔
+              enabled: true # 是否开启消费，默认true
+              messageModel: CLUSTERING # 默认集群消费（CLUSTERING） 广播消费（BROADCASTING）
+          sms-in-0:
+            consumer:
+              subscription: abcx
+
 
 dubbo:
   scan:
@@ -42,10 +76,21 @@ dubbo:
   registry:
     address: spring-cloud://${DUBBO_REGISTRY_ADDRESS}
   cloud:
-    subscribed-services: '' #设置订阅的应用列表，默认为* 订阅所有应用, ''则不订阅
+    subscribed-services: 'mycloud-user' #设置订阅的应用列表，默认为* 订阅所有应用, ''则不订阅
   consumer:
     check: false #为false表示启动时不检查是否有消费者
     filter: userContextConsumerFilter
   #自定义filter
   provider:
     filter: dubboExceptionFilter,-exception,userContextProviderFilter #使用自定义Filter，禁用默认的ExceptionFilter
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  typeAliasesPackage: com.pueeo.post.entity
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除字段值 3.3.0开始支持
+      logic-delete-value: true # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: false # 逻辑未删除值(默认为 0)
+  configuration:
+    map-underscore-to-camel-case: true

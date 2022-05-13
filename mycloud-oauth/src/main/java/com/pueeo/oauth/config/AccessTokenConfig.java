@@ -61,8 +61,7 @@ public class AccessTokenConfig {
                 AuthUser user = (AuthUser)principal;
                 //将额外的信息放入到LinkedHashMap中
                 LinkedHashMap<String,Object> extendInformation=new LinkedHashMap<>();
-                //设置用户的userId
-                extendInformation.put(TokenConstant.USER_ID, user.getUserId());
+                extendInformation.put(TokenConstant.USER_ID, user.getUid());
                 //添加到additionalInformation
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(extendInformation);
             }

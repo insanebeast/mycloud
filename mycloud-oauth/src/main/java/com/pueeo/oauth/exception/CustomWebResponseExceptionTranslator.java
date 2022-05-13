@@ -4,6 +4,8 @@ import com.pueeo.common.support.ApiResult;
 import com.pueeo.common.support.ResultEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
 import org.springframework.security.oauth2.common.exceptions.InvalidScopeException;
@@ -34,16 +36,20 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
      */
     private ApiResult doTranslateHandler(Exception e) {
         ResultEnum resultEnum = ResultEnum.SYSTEM_ERROR;
-        //判断异常，不支持的认证方式
         if(e instanceof UnsupportedGrantTypeException){
             resultEnum = ResultEnum.UNSUPPORTED_GRANT_TYPE;
-            //用户名或密码异常
-        }else if(e instanceof InvalidGrantException){
+        }else if(e instanceof InvalidGrantException){ //账号密码错误
             resultEnum = ResultEnum.USERNAME_OR_PASSWORD_ERROR;
-        }else if (e instanceof InvalidScopeException){
+        } else if (e instanceof InvalidScopeException){
             resultEnum = ResultEnum.INVALID_SCOPE;
         }else if (e instanceof InvalidRequestException){
             resultEnum = ResultEnum.INVALID_REQUEST;
+        }else if (e instanceof UsernameNotFoundException){
+            resultEnum = ResultEnum.USER_ACCOUNT_NOT_EXIST;
+        }else if (e instanceof BadCredentialsException){
+            resultEnum = ((BadCredentialsException) e).getResultEnum();
+        }else if (e instanceof InternalAuthenticationServiceException) {
+            return ApiResult.fail(e.getMessage());
         }
         return ApiResult.fail(resultEnum);
     }

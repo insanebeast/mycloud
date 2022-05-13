@@ -21,6 +21,9 @@
         <spring.boot.version>2.6.3</spring.boot.version>
         <spring.cloud.version>2021.0.1</spring.cloud.version>
         <spring.cloud.alibaba.version>2021.0.1.0</spring.cloud.alibaba.version>
+        <mybatisplus.version>3.5.1</mybatisplus.version>
+        <orika.version>1.5.4</orika.version>
+        <fastjson.version>1.2.79</fastjson.version>
     </properties>
 
     <dependencyManagement>

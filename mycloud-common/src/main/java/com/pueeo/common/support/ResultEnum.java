@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ResultEnum {
     CLIENT_AUTHENTICATION_FAILED(1001,"客户端认证失败"),
     USERNAME_OR_PASSWORD_ERROR(1002,"用户名或密码错误"),
+    PHONE_OR_CODE_ERROR(1002, "手机号或验证码错误"),
     UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式"),
     INVALID_TOKEN(1004,"无效的token"),
     INVALID_SCOPE(1005,"无效的scope"),
@@ -13,6 +14,7 @@ public enum ResultEnum {
     FORBID_REQUEST(1007, "禁止访问"),
 
     NO_PERMISSION(1005,"无权限访问"),
+    USER_ACCOUNT_NOT_EXIST(1006,"账号不存在"),
     SYSTEM_ERROR(500, "系统错误"),
 
 
@@ -23,6 +25,7 @@ public enum ResultEnum {
 
 
     USER_NOT_EXIST(10001, "用户不存在"),
+    USER_ACCOUNT_EXIST(10002, "账号已存在"),
     POST_NOT_EXIST(20001, "帖子不存在")
 
     ,

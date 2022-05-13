@@ -1,6 +1,6 @@
 package com.pueeo.post.entity.vo;
 
-import com.pueeo.user.entity.dto.UserDTO;
+import com.pueeo.user.entity.dto.UserRegisterDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -11,7 +11,7 @@ import java.util.Date;
 public class PostVO {
 
     private Long id;
-    private UserDTO author;
+    private UserRegisterDTO author;
     private String content;
     private Date createTime;
 }

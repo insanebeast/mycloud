@@ -1,5 +1,6 @@
 package com.pueeo.oauth.support;
 
+import com.pueeo.user.entity.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +14,9 @@ import java.util.Collection;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthUser implements UserDetails {
+public class AuthUser extends UserAccount implements UserDetails {
 
-    private Long userId;
+    private Long uid;
 
     //用户名
     private String username;

@@ -7,16 +7,19 @@ spring:
   main:
     allow-bean-definition-overriding: true
     web-application-type: reactive
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL_MASTER}
+    username: ${MYSQL_USERNAME_MASTER}
+    password: ${MYSQL_PASSWORD_MASTER}
+    hikari:
+      connection-timeout: 3000
+      idle-timeout: 100000
+      maximum-pool-size: 30
+      minimum-idle: 10
   redis:
     #database: 0 # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
     host: ${REDIS_HOST}
     password: ${REDIS_PASSWORD}
     port: ${REDIS_PORT}
     timeout: 3000 # 连接超时时间（毫秒）
-
-oauth2:
-  cloud:
-    ignoreUrls:
-      - /oauth/token
-      - /oauth/authorize
-

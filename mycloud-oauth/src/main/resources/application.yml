@@ -12,4 +12,14 @@ spring:
     password: ${REDIS_PASSWORD}
     port: ${REDIS_PORT}
     timeout: 3000 # 连接超时时间（毫秒）
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL_MASTER}
+    username: ${MYSQL_USERNAME_MASTER}
+    password: ${MYSQL_PASSWORD_MASTER}
+    hikari:
+      connection-timeout: 3000
+      idle-timeout: 100000
+      maximum-pool-size: 30
+      minimum-idle: 10
 

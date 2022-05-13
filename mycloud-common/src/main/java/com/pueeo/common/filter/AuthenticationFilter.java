@@ -42,7 +42,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             List<String> authorities = tempJsonArray.toJavaList(String.class);
             //放入LoginVal
             LoginUser loginUser = new LoginUser()
-                    .setUserId(userId)
+                    .setUid(userId)
                     .setUsername(principal)
                     .setJti(jti).setExpiresIn(expireIn)
                     .setAuthorities(authorities);

@@ -2,6 +2,7 @@ package com.pueeo.gateway;
 
 import com.alibaba.cloud.sentinel.gateway.ConfigConstants;
 import com.alibaba.csp.sentinel.config.SentinelConfig;
+import com.alibaba.csp.sentinel.transport.config.TransportConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

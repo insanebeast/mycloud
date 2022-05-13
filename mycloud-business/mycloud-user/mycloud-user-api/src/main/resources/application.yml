@@ -7,6 +7,16 @@ spring:
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL_MASTER}
+    username: ${MYSQL_USERNAME_MASTER}
+    password: ${MYSQL_PASSWORD_MASTER}
+    hikari:
+      connection-timeout: 3000
+      idle-timeout: 100000
+      maximum-pool-size: 30
+      minimum-idle: 10
   redis:
     #database: 0 # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
     host: ${REDIS_HOST}
@@ -31,7 +41,26 @@ spring:
             data-id: ${spring.application.name}-flow-rule # Nacos 配置集编号
             data-type: json # 数据格式
             rule-type: FLOW # 规则类型
-
+    stream:
+      function:
+          definition: producer
+      bindings:
+        producer-out-0:
+          destination: SELF_TEST_TOPIC
+        user-out-0:
+          destination: USER_TOPIC
+        sms-out-0:
+          destination: SMS_TOPIC
+      rocketmq:
+        binder:
+          name-server: ${ROCKETMQ_NAMESERVER}
+          group: mycloud
+        bindings:
+          user-out-0:
+            producer:
+              producerType: normal # 普通消息（Normal） 事物消息（Trans）
+              sendType: Sync # 同步消息（Sync） 异步消息（Async） 单向消息（Oneway）
+#             group: user-producer-group # 同一类 Producer 的集合，这类 Producer 发送同一类消息且发送逻辑一致。如果发送的是事务消息且原始生产者在发送之后崩溃，则 Broker 服务器会联系同一生产者组的其他生产者实例以提交或回溯消费
 
 
 dubbo:

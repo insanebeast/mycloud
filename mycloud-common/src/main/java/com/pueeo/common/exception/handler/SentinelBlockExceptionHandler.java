@@ -3,7 +3,7 @@ package com.pueeo.common.exception.handler;
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
-import com.pueeo.common.exception.ServiceException;
+import com.pueeo.common.exception.BusinessException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SentinelBlockExceptionHandler implements BlockExceptionHandler {
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, BlockException e) {
         if (e instanceof FlowException){
-            throw new ServiceException(300, "Sentinel触发【流量控制】");
+            throw new BusinessException(300, "Sentinel触发【流量控制】");
         }
     }
 }

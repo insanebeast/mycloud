@@ -1,5 +1,6 @@
 package com.pueeo.post.service;
 
+import com.pueeo.common.support.LoginUser;
 import com.pueeo.post.entity.dto.PostDTO;
 import com.pueeo.post.entity.vo.PostVO;
 
@@ -9,5 +10,5 @@ public interface PostService {
 
     PostVO get(Long id);
 
-    String info();
+    LoginUser info();
 }

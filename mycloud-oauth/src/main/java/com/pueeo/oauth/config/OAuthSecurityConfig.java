@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class OAuthSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private ThirdLoginOAuthSecurityConfig thirdLoginOAuthSecurityConfig;
 
     /**
      * 加密算法
@@ -33,19 +36,17 @@ public class OAuthSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             //注入自定义的授权配置类
-            //.apply(smsCodeSecurityConfig)
-            //.and()
+            .apply(thirdLoginOAuthSecurityConfig)
+            .and()
             .authorizeRequests()
             //注销的接口需要放行
             //.antMatchers("/oauth/logout").permitAll()
             .anyRequest().authenticated()
             .and()
-            .formLogin()
-            .loginProcessingUrl("/login")
-            .permitAll()
+            //前后端分离采用JWT 不需要session
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .csrf()
-            .disable();
+            .csrf().disable();
     }
 
     @Override

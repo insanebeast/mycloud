@@ -16,7 +16,7 @@ public class UserContextProviderFilter implements Filter {
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        String userInfo = RpcContext.getContext().getAttachment(SysConstant.USER_CONTEXT_RPC_ATTACHMENT);
+        String userInfo = invocation.getAttachment(SysConstant.USER_CONTEXT_RPC_ATTACHMENT);
         if (StringUtils.isBlank(userInfo)) {
             return invoker.invoke(invocation);
         }

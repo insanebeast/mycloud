@@ -2,35 +2,45 @@ spring:
   application:
     name: mycloud-gateway
   cloud:
-    # Spring Cloud Gateway 配置项，对应 GatewayProperties 类
     gateway:
-      # 与 Spring Cloud 注册中心的集成，对应 DiscoveryLocatorProperties 类
-      discovery:
-        locator:
-          enabled: true
-          url-expression: "'lb://' + serviceId" # 路由的目标地址的表达式
+      routes:
+        - id: mycloud-post
+          uri: lb://mycloud-post
+          predicates:
+            - Path=/post-api/**
+          filters:
+            - StripPrefix=1
+        - id: mycloud-user
+          uri: lb://mycloud-user
+          predicates:
+            - Path=/user-api/**
+          filters:
+            - StripPrefix=1
+        - id: mycloud-oauth
+          uri: lb://mycloud-oauth
+          predicates:
+            - Path=/oauth/**
     sentinel:
+      enabled: true
       eager: true
       transport:
         dashboard: ${SENTINEL_DASHBOARD}
-      # Sentinel 对 Spring Cloud Gateway 的专属配置项，对应 SentinelGatewayProperties 类
-      scg:
-        order: -2147483648 # 过滤器顺序，默认为 -2147483648 最高优先级
-        fallback: #当 fallback.mode 选择空时，使用 Sentinel 定义的 BlockRequestHandler 处理 fallback 的情况
-          mode: # fallback 模式，目前有三种：response、redirect、空
-          # 专属 response 模式
-          response-status: 429 # 响应状态码，默认为 429
-          response-body: block by sentinel # 响应内容，默认为空
-          content-type: application/json # 内容类型，默认为 application/json
-          # 专属 redirect 模式
-          redirect: http://www.baidu.com
+      filter:
+        url-patterns: /** #拦截请求地址
       datasource:
         ds1:
           nacos:
             server-addr: ${SENTINEL_NACOS_SERVER}
             namespace: ${SENTINEL_NACOS_NAMESPACE}
-            data-id: ${spring.application.name}-api-group-rule.yml
+            data-id: ${spring.application.name}-api-group-rule.json
             data-type: json # 数据格式
-            rule-type: GW_API_GROUP # 规则类型
+            rule-type: gw_api_group # 规则类型
+        ds2:
+          nacos:
+            server-addr: ${SENTINEL_NACOS_SERVER}
+            namespace: ${SENTINEL_NACOS_NAMESPACE}
+            data-id: ${spring.application.name}-flow-rule.json
+            data-type: json # 数据格式
+            rule-type: gw_flow # 规则类型
 
 

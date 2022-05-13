@@ -6,7 +6,7 @@ import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.alibaba.csp.sentinel.slots.system.SystemBlockException;
-import com.pueeo.common.exception.ServiceException;
+import com.pueeo.common.exception.BusinessException;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.Invocation;
@@ -35,7 +35,7 @@ public class DubboExceptionFilter extends ExceptionFilter {
         if (appResponse.hasException() && GenericService.class != invoker.getInterface()) {
             Throwable exception = appResponse.getException();
             //ServiceException直接抛出
-            if (exception instanceof ServiceException){
+            if (exception instanceof BusinessException){
                 return;
             }
             //触发限流降级时，将BlockException包装成ServiceException抛出（由于BlockException未实现Seralizable，在Dubbo序列化时会报错）
@@ -55,19 +55,19 @@ public class DubboExceptionFilter extends ExceptionFilter {
 
     private void setBlockException(Result appResponse, Throwable exception) {
         if (exception instanceof FlowException) {
-            appResponse.setException(new ServiceException(500, "Sentinel触发【流量控制】"));
+            appResponse.setException(new BusinessException(500, "Sentinel触发【流量控制】"));
         }
         if (exception instanceof AuthorityException) {
-            appResponse.setException(new ServiceException(500, "Sentinel触发【黑白名单控制】"));
+            appResponse.setException(new BusinessException(500, "Sentinel触发【黑白名单控制】"));
         }
         if (exception instanceof SystemBlockException) {
-            appResponse.setException(new ServiceException(500, "Sentinel触发【系统自适应限流】"));
+            appResponse.setException(new BusinessException(500, "Sentinel触发【系统自适应限流】"));
         }
         if (exception instanceof ParamFlowException) {
-            appResponse.setException(new ServiceException(500, "Sentinel触发【热点参数限流】"));
+            appResponse.setException(new BusinessException(500, "Sentinel触发【热点参数限流】"));
         }
         if (exception instanceof DegradeException) {
-            appResponse.setException(new ServiceException(500, "Sentinel触发【熔断降级】"));
+            appResponse.setException(new BusinessException(500, "Sentinel触发【熔断降级】"));
         }
     }
 }

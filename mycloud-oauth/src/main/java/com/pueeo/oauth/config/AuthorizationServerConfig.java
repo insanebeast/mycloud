@@ -5,6 +5,7 @@ import com.pueeo.common.utils.ResponseUtil;
 import com.pueeo.oauth.exception.CustomClientCredentialsTokenEndpointFilter;
 import com.pueeo.oauth.exception.CustomWebResponseExceptionTranslator;
 import com.pueeo.oauth.service.CustomUserDetailsService;
+import com.pueeo.oauth.third.sms.SmsCodeGranter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,16 +19,23 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * OAuth2.0授权服务配置类
- * @EnableAuthorizationServer：这个注解标注这是一个认证中心
+ * @EnableAuthorizationServer：标注这是一个认证中心
  */
 @EnableAuthorizationServer
 @Configuration
@@ -70,9 +78,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(new BCryptPasswordEncoder().encode("123"))
                 //资源id，唯一，比如订单服务作为一个资源,可以设置多个
                 .resourceIds("user","post")
-                //授权模式，总共四种：authorization_code（授权码模式）、password（密码模式）、client_credentials（客户端模式）、implicit（简化模式）
-                //refresh_token并不是授权模式
-                .authorizedGrantTypes("authorization_code","password","client_credentials","implicit","refresh_token")
+                /*
+                授权模式：
+                    authorization_code（授权码模式）
+                    password（密码模式）
+                    client_credentials（客户端模式）
+                    implicit（简化模式）
+                    refresh_token（不是授权模式，用于刷新token）
+                    sms_code（短信验证码）
+                 */
+                .authorizedGrantTypes("authorization_code","password","client_credentials","implicit","refresh_token","sms_code")
                 //允许的授权范围 scope，客户端的权限，这里的all只是一种标识，可以自定义，为了后续的资源服务进行权限控制
                 .scopes("all")
                 //false 则跳转到授权页面
@@ -117,6 +132,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     @SuppressWarnings("ALL")
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        //自定义TokenGranter配置
+        List<TokenGranter> tokenGranters = new ArrayList<>(Collections.singletonList(endpoints.getTokenGranter()));
+        tokenGranters.add(new SmsCodeGranter(authenticationManager, tokenServices(), clientDetailsService, new DefaultOAuth2RequestFactory(clientDetailsService)));
+
         endpoints
                 //如果需要使用refresh_token模式则需要注入userDetailService
                 .userDetailsService(customUserDetailsService)
@@ -128,6 +147,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 //令牌管理服务，无论哪种模式都需要
                 .tokenServices(tokenServices())
+                //自定义TokenGranter配置
+                .tokenGranter(new CompositeTokenGranter(tokenGranters))
                 //只允许POST提交访问令牌，uri：/oauth/token
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);
     }

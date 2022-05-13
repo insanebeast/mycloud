@@ -1,7 +1,7 @@
 package com.pueeo.common.exception.handler;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.pueeo.common.exception.ServiceException;
+import com.pueeo.common.exception.BusinessException;
 import com.pueeo.common.support.ApiResult;
 import com.pueeo.common.support.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ServiceException.class)
-    public ApiResult handleException(ServiceException exception) {
+    @ExceptionHandler(BusinessException.class)
+    public ApiResult handleException(BusinessException exception) {
         log.error(String.format("全局异常处理[ServiceException]:%s--%s",exception.getCode(), exception.getMessage()), exception);
         return ApiResult.fail(exception.getCode(), exception.getMessage());
     }
