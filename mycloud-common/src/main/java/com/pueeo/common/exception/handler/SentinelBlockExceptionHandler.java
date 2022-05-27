@@ -4,6 +4,7 @@ import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHan
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.pueeo.common.exception.BusinessException;
+import com.pueeo.common.support.ResultEnum;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;

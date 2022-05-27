@@ -94,3 +94,33 @@ mybatis-plus:
       logic-not-delete-value: false # 逻辑未删除值(默认为 0)
   configuration:
     map-underscore-to-camel-case: true
+
+#二级缓存
+j2cache:
+  # j2cache配置文件位置（默认/j2cache-dev.properties）
+  config-location: classpath:/j2cache/j2cache-${spring.profiles.active}.properties
+  # 是否启用Spring Cache（默认false）
+  open-spring-cache: true
+  # 设置Spring Cache是否允许缓存null值（默认false）
+  allow-null-values: true
+  # 是否开启2级缓存（默认true）
+  l2-cache-open: true
+  # redis客户端类型（jedis | lettuce（默认））
+  redis-client: lettuce
+  # 缓存清除模式
+  # active:主动清除，二级缓存过期主动通知各节点清除，优点在于所有节点可以同时收到缓存清除
+  # passive:被动清除（默认），一级缓存过期进行通知各节点清除一二级缓存
+  # blend:两种模式一起运作，对于各个节点缓存准确性以及及时性要求高的可以使用（推荐使用前面两种模式中一种）
+  cache-clean-mode: active
+  # 二级缓存序列化格式（fst（推荐） | kryo | json | fastjson | java（默认） | fse | 自定义classname）
+  j2CacheConfig:
+    serialization: fastjson
+
+
+#线程池配置
+thread-pool:
+  common:
+    core-pool-size: 10
+    max-pool-size: 20
+    queue-capacity: 100
+    keep-alive-seconds: 60

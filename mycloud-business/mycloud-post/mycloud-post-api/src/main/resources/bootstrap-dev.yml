@@ -15,3 +15,7 @@ spring:
             refresh: true
           - data-id: common.yml
             refresh: true
+          - data-id: j2cache.properties
+            refresh: true
+          - data-id: system-config.yml
+            refresh: true

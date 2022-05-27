@@ -2,6 +2,8 @@ package com.pueeo.common.support.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -136,7 +138,7 @@ public class RedisService {
 
     public boolean setnx(String key, Object value, long time) {
         try {
-            redisTemplate.opsForValue().setIfAbsent(key, value, time, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().setIfAbsent(key, value, time, TimeUnit.MILLISECONDS);
             return true;
         } catch (Exception e) {
             log.error(key, e);
@@ -149,13 +151,13 @@ public class RedisService {
      *
      * @param key   键
      * @param value 值
-     * @param time  时间(秒) time要大于0 如果time小于等于0 将设置无限期
+     * @param time  时间(毫秒) time要大于0 如果time小于等于0 将设置无限期
      * @return true成功 false 失败
      */
     public boolean setex(String key, Object value, long time) {
         try {
             if (time > 0) {
-                redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set(key, value, time, TimeUnit.MILLISECONDS);
             } else {
                 set(key, value);
             }
@@ -512,6 +514,25 @@ public class RedisService {
         } catch (Exception e) {
             log.error(key, e);
             return 0;
+        }
+    }
+
+    /**
+     * 执行lua脚本
+     *
+     * @param script
+     * @param resultType
+     * @param keys
+     * @param args
+     * @return
+     */
+    public <T> T lua(String script, Class<T> resultType, List<String> keys, Object... args) {
+        try {
+            RedisScript<T> redisScript = new DefaultRedisScript<>(script, resultType);
+            return redisTemplate.execute(redisScript, keys, args);
+        }catch (Exception e){
+            log.error("redis lua error: ", e);
+            return null;
         }
     }
 

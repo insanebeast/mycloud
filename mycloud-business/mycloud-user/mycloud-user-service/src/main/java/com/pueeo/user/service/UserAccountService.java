@@ -15,5 +15,4 @@ import com.pueeo.user.entity.vo.UserProfileVO;
  */
 public interface UserAccountService extends IService<UserAccount> {
 
-    UserProfileVO register(UserRegisterDTO userDTO);
 }

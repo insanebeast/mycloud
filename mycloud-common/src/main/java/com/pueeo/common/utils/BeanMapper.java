@@ -9,7 +9,7 @@ import ma.glasnost.orika.metadata.TypeFactory;
 
 import java.util.List;
 
-public class BeanUtil {
+public class BeanMapper {
     private static final MapperFactory mapperFactory;
     private static final MapperFacade mapperFacade;
 
@@ -30,7 +30,7 @@ public class BeanUtil {
     }
 
     /**
-     * 简单的复制出新类型对象.
+     * 简单的复制出新类型对象
      * 通过source.getClass() 获得源Class
      */
     public static <S, T> T map(S source, Class<T> targetClass) {
@@ -38,8 +38,8 @@ public class BeanUtil {
     }
 
     /**
-     * 极致性能的复制出新类型对象.
-     * 预先通过BeanMapper.getType() 静态获取并缓存Type类型，在此处传入
+     * 极致性能的复制出新类型对象
+     * 预先通过BeanUtil.getType() 静态获取并缓存Type类型，在此处传入
      */
     public static <S, D> D map(S source, Type<S> sourceType, Type<D> destinationType) {
         return mapperFacade.map(source, sourceType, destinationType);
@@ -54,7 +54,7 @@ public class BeanUtil {
     }
 
     /**
-     * 极致性能的复制出新类型对象到ArrayList.
+     * 极致性能的复制出新类型对象到ArrayList
      * 预先通过BeanMapper.getType() 静态获取并缓存Type类型，在此处传入
      */
     public static <S, D> List<D> mapList(Iterable<S> sourceList, Type<S> sourceType, Type<D> destinationType) {
@@ -78,7 +78,7 @@ public class BeanUtil {
     }
 
     /**
-     * 预先获取orika转换所需要的Type，避免每次转换.
+     * 预先获取orika转换所需要的Type，避免每次转换
      */
     public static <E> Type<E> getType(final Class<E> rawType) {
         return TypeFactory.valueOf(rawType);

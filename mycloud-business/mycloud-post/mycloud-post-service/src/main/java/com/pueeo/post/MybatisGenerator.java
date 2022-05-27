@@ -11,16 +11,19 @@ import java.util.List;
 
 public class MybatisGenerator {
 
-    private static String url = "jdbc:mysql://8.129.160.9:3306/mycloud";
+//    private static String url = "jdbc:mysql://8.129.160.9:3306/mycloud";
+//    private static String username = "root";
+//    private static String password = "meiyoumima";
+    private static String url = "jdbc:mysql://192.168.10.30:3306/ferrari_major";
     private static String username = "root";
-    private static String password = "meiyoumima";
+    private static String password = "bbyy2020";
 
     public static void main(String[] args) {
         /*
           要生成的表
          */
         List<String> list = new ArrayList<>();
-        list.add("post_info");
+        list.add("sys_multi_language");
         //list.add("user_account");
 
         FastAutoGenerator.create(url, username, password)

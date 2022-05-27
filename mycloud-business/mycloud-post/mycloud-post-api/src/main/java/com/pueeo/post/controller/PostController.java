@@ -2,13 +2,18 @@ package com.pueeo.post.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.google.common.collect.ImmutableMap;
 import com.pueeo.common.constant.SysConstant;
 import com.pueeo.common.exception.BusinessException;
 import com.pueeo.common.support.ApiResult;
 import com.pueeo.common.support.LoginUser;
 import com.pueeo.common.support.redis.RedisService;
+import com.pueeo.common.support.sysconf.SysConfigEnum;
+import com.pueeo.common.support.sysconf.SysConfigService;
+import com.pueeo.post.config.PostSysConfig;
 import com.pueeo.post.entity.dto.PostDTO;
 import com.pueeo.post.service.PostService;
+import com.pueeo.user.config.UserSysConfig;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +35,9 @@ public class PostController {
     private PostService postService;
     @Resource
     private RedisService redisService;
+    @Resource
+    private SysConfigService sysConfigService;
+
 
 
 //    @GetMapping("/hello")
@@ -45,6 +53,27 @@ public class PostController {
 //        String url = instance.getUri() + "/user/get/1001";
 //        return restTemplate.getForObject(url, String.class);
 //    }
+
+    @GetMapping("/config/get")
+    public ApiResult getConfig(){
+        PostSysConfig postSysConfig = sysConfigService.getConfig(SysConfigEnum.POST);
+        UserSysConfig userSysConfig = sysConfigService.getConfig(SysConfigEnum.USER);
+        return ApiResult.success(ImmutableMap.of("post",postSysConfig,"user",userSysConfig));
+    }
+
+    @GetMapping("/config/set")
+    public ApiResult setConfig(boolean a,boolean b,boolean c){
+        PostSysConfig postSysConfig = new PostSysConfig();
+        postSysConfig.setPostSwitch(a);
+        postSysConfig.setBindPhone(b);
+        postSysConfig.setCertificate(c);
+        sysConfigService.updateConfig(SysConfigEnum.POST, postSysConfig);
+        UserSysConfig userSysConfig = new UserSysConfig();
+        userSysConfig.setEnableForceCertificate(a);
+        userSysConfig.setEnableForceBindPhone(b);
+        sysConfigService.updateConfig(SysConfigEnum.USER, userSysConfig);
+        return ApiResult.success();
+    }
 
     @GetMapping("/add")
     public ApiResult add(PostDTO postDTO){

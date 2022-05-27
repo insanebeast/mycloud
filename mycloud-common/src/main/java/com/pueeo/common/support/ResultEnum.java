@@ -1,9 +1,13 @@
 package com.pueeo.common.support;
 
+import com.pueeo.common.exception.BusinessException;
+import com.pueeo.common.utils.Assert;
 import lombok.Getter;
 
+import java.text.MessageFormat;
+
 @Getter
-public enum ResultEnum {
+public enum ResultEnum implements Assert {
     CLIENT_AUTHENTICATION_FAILED(1001,"客户端认证失败"),
     USERNAME_OR_PASSWORD_ERROR(1002,"用户名或密码错误"),
     PHONE_OR_CODE_ERROR(1002, "手机号或验证码错误"),
@@ -26,7 +30,9 @@ public enum ResultEnum {
 
     USER_NOT_EXIST(10001, "用户不存在"),
     USER_ACCOUNT_EXIST(10002, "账号已存在"),
-    POST_NOT_EXIST(20001, "帖子不存在")
+    POST_NOT_EXIST(20001, "帖子不存在"),
+
+    TEST_ERROR(12345, "{0}不能为{1}")
 
     ,
     ;
@@ -37,5 +43,14 @@ public enum ResultEnum {
     ResultEnum(int code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    @Override
+    public BusinessException newException(Object... args) {
+        if (args.length == 0){
+            return new BusinessException(code, message);
+        }
+        String msg = MessageFormat.format(message, args);
+        return new BusinessException(code, msg);
     }
 }

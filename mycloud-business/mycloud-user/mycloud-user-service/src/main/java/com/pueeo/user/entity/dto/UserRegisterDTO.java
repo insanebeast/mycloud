@@ -3,6 +3,9 @@ package com.pueeo.user.entity.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -13,6 +16,7 @@ public class UserRegisterDTO implements Serializable {
     /**
      * 账号
      */
+    @NotBlank(message = "用户名不能为空")
     private String username;
     /**
      * 密码
