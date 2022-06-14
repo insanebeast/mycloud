@@ -1,6 +1,7 @@
 package com.pueeo.common.support.threadpool;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.MoreExecutors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.ApplicationArguments;
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,14 @@ public class ThreadPoolMonitorRunner implements ApplicationRunner, ApplicationCo
             executors.add(monitor.getExecutor());
         });
         scheduler.scheduleAtFixedRate(this::monitor, 0, 1, TimeUnit.MINUTES);
+
+        //线程池优雅关闭
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> executors.forEach(executor -> {
+//            if (!ObjectUtils.isEmpty(executor)){
+//                MoreExecutors.shutdownAndAwaitTermination(scheduler, 10L, TimeUnit.SECONDS);
+//            }
+//        })));
+
     }
 
     private void monitor() {
